@@ -1,26 +1,26 @@
-#!/usr/bin/python3
 def pascal_triangle(n): 
-    # Base case: return empty list for n <= 0
-    if n <= 0:
-        return []
+    result = [] 
 
-    # Start with a hardcoded list of the first row
-    result = [[1]]
+    # Edge case 
+    if n <= 0: 
+        return result 
 
-    # Iterate from 1 to n
-    for i in range(1, n): 
-        row = [1] 
+    # Generate an empty list of lists  
+    for rows in range(n): 
+        row_list = []  
+        for cols in range(rows + 1): 
+            row_list.append(0)  
+        result.append(row_list) 
 
-        # Iterate from 1 to the length of the last row
-        for j in range(1, i): 
-            # Calculate the value of each row item 
-            # and append them to the row
-            row.append(result[i-1][j] + result[i-1][j-1]) 
+    # Update the first and last elements to 1 
+    result[0][0] = 1
+    for rows in range(1, n): 
+        result[rows][0] = 1
+        result[rows][rows] = 1
 
-        # Append the last item to the row
-        row.append(1) 
+    # Update the values inside the list of lists using the previous row 
+    for rows in range(1, n): 
+        for cols in range(1, rows): 
+            result[rows][cols] = result[rows-1][cols-1] + result[rows-1][cols] 
 
-        # Append the new row to the result
-        result.append(row) 
-
-    return result
+    return result 
