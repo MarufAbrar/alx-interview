@@ -1,14 +1,26 @@
 #!/usr/bin/python3
-def pascal_triangle(n): if n <= 0: return []
+def pascal_triangle(n): 
+    # Base case: return empty list for n <= 0
+    if n <= 0:
+        return []
 
-triangle = []
-for row_num in range(n):
-    row = [1]
-    for k in range(1, row_num):
-        prev_row = triangle[row_num-1]
-        row.append(prev_row[k-1] + prev_row[k])
-    if row_num != 0:
-        row.append(1)
-    triangle.append(row)
+    # Start with a hardcoded list of the first row
+    result = [[1]]
 
-return triangle
+    # Iterate from 1 to n
+    for i in range(1, n): 
+        row = [1] 
+
+        # Iterate from 1 to the length of the last row
+        for j in range(1, i): 
+            # Calculate the value of each row item 
+            # and append them to the row
+            row.append(result[i-1][j] + result[i-1][j-1]) 
+
+        # Append the last item to the row
+        row.append(1) 
+
+        # Append the new row to the result
+        result.append(row) 
+
+    return result
