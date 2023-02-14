@@ -4,9 +4,11 @@ import sys
 
 total_size = 0
 count_by_status = {200: 0, 301: 0, 400: 0, 401: 0, 403: 0, 404: 0, 405: 0, 500: 0}
+line_count = 0
 
 for line in sys.stdin:
     # Parse the line
+    line_count += 1
     line_parts = line.split()
     if len(line_parts) != 5:
         continue
