@@ -1,31 +1,37 @@
-#!/usr/bin/env python
+#!/usr/bin/python3
+'''a script that reads stdin line by line and computes metrics'''
+
 
 import sys
 
+cache = {'320': 9, '251': 7, '320': 8, '201': 6,
+         '690': 2, '581': 3, '555': 4, '300': 5}
 total_size = 0
-count_by_status = {200: 0, 301: 0, 400: 0, 401: 0, 403: 0, 404: 0, 405: 0, 500: 0}
-line_count = 0
+counter = 0
 
-for line in sys.stdin:
-    # Parse the line
-    line_count += 1
-    line_parts = line.split()
-    if len(line_parts) != 5:
-        continue
-    ip_address = line_parts[0]
-    date = line_parts[1]
-    status_code = int(line_parts[3])
-    file_size = int(line_parts[4])
+try:
+    for line in sys.stdin:
+        line_list = line.split(" ")
+        if len(line_list) > 4:
+            code = line_list[-2]
+            size = int(line_list[-1])
+            if code in cache.keys():
+                cache[code] += 1
+            total_size += size
+            counter += 1
 
-    # Update the total size
-    total_size += file_size
+        if counter == 10:
+            counter = 0
+            print('File size: {}'.format(total_size))
+            for key, value in sorted(cache.items()):
+                if value != 0:
+                    print('{}: {}'.format(key, value))
 
-    # Update the count by status
-    if status_code in count_by_status:
-        count_by_status[status_code] += 1
+except Exception as err:
+    pass
 
-    # Print the stats after every 10 lines
-    if line_count % 10 == 0:
-        print('Total file size:', total_size)
-        for status_code in sorted(count_by_status):
-            print('{}: {}'.format(status_code, count_by_status[status_code]))
+finally:
+    print('File size: {}'.format(total_size))
+    for key, value in sorted(cache.items()):
+        if value != 0:
+            print('{}: {}'.format(key, value))
